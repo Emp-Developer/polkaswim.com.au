@@ -1,0 +1,59 @@
+{% if block.type == 'filter' %}
+{% assign tags = block.settings.filter_by  | replace: ' ,', ',' | replace: ', ', ',' | split: ',' %}
+
+<div class="filter__group" id="group--{{  block.settings.filter_by_title }}">
+  <label class="filter__label">{{ block.settings.filter_by_title }}:</label>
+  <ul class="filter-list{% if block.settings.filter_by_title contains "Color" or block.settings.filter_by_title contains "Colour" %} color-filter{% endif %} {% if block.settings.filter_by_title contains "Collection" %} collection-filter{% endif %}" id="{{ cat_handle }}">
+    {% for tag in tags %}
+    {% assign is_color = false %}
+    {% capture color_filter %}{{ block.settings.filter_by_title | downcase }}{% endcapture %}
+
+    {% if color_filter contains 'color' or color_filter contains 'colour' %}
+    {% assign swatch_image_url = tag | handle | append: '.png' | file_url %}
+    {% assign tempTag = tag | split: '-' %}
+    {% assign css_color = tempTag | split: ' ' | last | handle %}
+    {% assign is_color = true %}
+    {% endif %}
+    {% assign tempTag = tag | split: '-' %}
+
+    {%- assign tag_name = tag | strip -%}
+    {%- assign tag_text = tag_name | remove_first: cat_item | remove_first: '-' -%}
+
+    {% if current_tags contains tag %}
+
+    {% comment %}   
+    <li class="current">
+      <input id="{{ tag_text }}" type="checkbox" name="type1"  checked="">
+      <label for="{{ tag_text }}"> {{ tempTag.last | link_to_remove_tag: tag }}</label>
+    </li>
+    {% elsif collection.all_tags contains tag %}
+    <li>
+      <input id="{{ tag_text }}" type="checkbox" name="type1">
+      <label for="{{ tag_text }}">{{ tempTag.last | link_to_add_tag: tag }}</label>
+    </li>
+    {% endcomment %}
+
+
+    <li data-variant-image="{{ variant_image_url }}" class="current">
+      {% if is_color %}
+      <span style="background-color: {{ css_color }}; background-image: url('{{ swatch_image_url }}');" class="color_filter"></span>
+      {% endif %}
+      {{ tempTag.last | link_to_remove_tag: tag }}
+    </li>
+    {% elsif collection.all_tags contains tag %}
+    <li data-variant-image="{{ variant_image_url }}">
+      {% if is_color %}
+      <span style="background-color: {{ css_color }}; background-image: url('{{ swatch_image_url }}');" class="color_filter"></span>
+      {% endif %}
+      {{ tempTag.last | link_to_add_tag: tag }}
+    </li>
+
+
+    {% endif %}
+
+
+    {% endfor %}
+  </ul>
+</div>
+
+{% endif %}

@@ -1,0 +1,372 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <!-- Google Tag Manager -->
+	<script async="async">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+		new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+		j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+		'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+		})(window,document,'script','dataLayer','GTM-PB9HVJQ');
+ 	</script>
+    <link rel="preload" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" as="style" onload="this.rel='stylesheet'"/>
+    
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <link rel="preload" type="text/css" href="https://kenwheeler.github.io/slick/slick/slick-theme.css" as="style" onload="this.rel='stylesheet'"/>
+        
+
+  <!-- End Google Tag Manager -->
+
+  <meta name="p:domain_verify" content="33d55480ff5da521cc1f652ddc06f5d5"/>
+  
+  <!-- Basic page needs ================================================== -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  
+  {% if settings.favicon %}
+  <link rel="shortcut icon" href="{{ settings.favicon | img_url: '32x32' }}" type="image/png" />
+  {% endif %}
+
+  <!-- Title and description ================================================== -->
+  {% comment %}<title>
+  {{ page_title }}{% if current_tags %}{% assign meta_tags = current_tags | join: ', ' %} &ndash; {{ 'general.meta.tags' | t: tags: meta_tags }}{% endif %}{% if current_page != 1 %} &ndash; {{ 'general.meta.page' | t: page: current_page }}{% endif %}{% unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless %}
+  </title>{% endcomment %}
+
+  {% if page_description %}
+  {% comment %}<meta name="description" content="{{ page_description | escape }}">{% endcomment %}
+  {% endif %}
+
+  <!-- Social meta ================================================== -->
+  {% include 'social-meta-tags' %}
+  <script src="lazysizes.min.js" async="async"></script>
+  
+  
+  <!-- CSS ================================================== -->
+  {{ 'timber.scss.css' | asset_url | stylesheet_tag }}
+  {{ 'theme.scss.css' | asset_url | stylesheet_tag }}
+   
+
+  <!-- Helpers ================================================== -->
+  <link rel="canonical" href="{{ canonical_url }}">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="{{ settings.color_primary }}">
+  
+  <script>
+    window.theme = window.theme || {};
+
+    var theme = {
+      strings: {
+        addToCart: {{ 'products.product.add_to_cart' | t | json }},
+        soldOut: {{ 'products.product.sold_out' | t | json }},
+        unavailable: {{ 'products.product.unavailable' | t | json }},
+        zoomClose: {{ "products.zoom.close" | t | json }},
+        zoomPrev: {{ "products.zoom.prev" | t | json }},
+        zoomNext: {{ "products.zoom.next" | t | json }},
+        addressError: {{ 'map.errors.address_error' | t | json }},
+        addressNoResults: {{ 'map.errors.address_no_results' | t | json }},
+        addressQueryLimit: {{ 'map.errors.address_query_limit_html' | t | json }},
+        authError: {{ 'map.errors.auth_error_html' | t | json }}
+      },
+      settings: {
+        // Adding some settings to allow the editor to update correctly when they are changed
+        enableWideLayout: {{ settings.enable_wide_layout }},
+        typeAccentTransform: {{ settings.type_accent_transform }},
+        typeAccentSpacing: {{ settings.type_accent_spacing }},
+        baseFontSize: '{{ settings.type_base_size }}',
+        headerBaseFontSize: '{{ settings.type_header_size }}',
+        accentFontSize: '{{ settings.type_accent_size }}'
+      },
+      variables: {
+        mediaQueryMedium: 'screen and (max-width: 768px)',
+        bpSmall: false
+      },
+      moneyFormat: {{ shop.money_format | json }}
+    }
+
+    document.documentElement.className = document.documentElement.className.replace('no-js', 'supports-js');
+  </script>
+
+  <!-- Header hook for plugins ================================================== -->
+  {{ content_for_header }}
+  
+  <script src="{{ 'lazysizes.min.js' | asset_url }}" async="async"></script>
+
+  {% comment %}
+    If you store has customer accounts disabled, you can remove the following JS file
+  {% endcomment %}
+  {% if request.page_type contains 'customers/' %}
+    {{ 'shopify_common.js' | shopify_asset_url | script_tag }}
+  {% endif %}
+  
+ </head> 
+
+<body id="{{ page_title | handle }}" class="{% if customer %}customer-logged-in {% endif %}template-{{ request.page_type | handle }}">
+  
+  <!-- Google Tag Manager (noscript) -->
+	<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PB9HVJQ"
+	height="0" width="0" style="display:none;visibility:hidden"></iframe>
+  	</noscript>
+<!-- End Google Tag Manager (noscript) -->
+  
+  {% section 'header' %}
+
+  <main class="wrapper main-content" role="main">
+    <div class="grid">
+        <div class="grid__item">
+          {{ content_for_layout }}
+        </div>
+    </div>
+  </main>
+
+  {% section 'footer' %}
+
+  {%- if request.page_type == 'index' -%}
+    <p id="slideshow-info" class="visually-hidden" aria-hidden="true">
+      {{- 'home_page.slideshow.navigation_instructions' | t -}}
+    </p>
+  {%- endif -%}
+
+  {% if request.page_type == 'product' or request.page_type == 'index' %}
+    {{ 'option_selection.js' | shopify_asset_url | script_tag }}
+  {% endif %}
+
+  <ul hidden>
+    <li id="a11y-refresh-page-message">{{ 'general.accessibility.refresh_page' | t }}</li>
+    <li id="a11y-external-message">{{ 'general.accessibility.new_window' | t }}</li>
+    <li id="a11y-new-window-external-message">{{ 'general.accessibility.new_window_and_external' | t }}</li>
+  </ul>
+   
+  {{ 'jquery-2.2.3.min.js' | asset_url | script_tag }}
+  {{ 'theme.js' | asset_url | script_tag }}
+  {{ 'jquery-ui.js' | asset_url | script_tag }}
+  
+    <script src="application.js" async="async"></script>
+
+</body>
+  
+</html>
+
+{% if template contains 'product' or template contains 'cart' or template contains 'checkout' %}
+
+<!-- Begin Shopify-Afterpay JavaScript Snippet (v1.0.7) -->
+<script defer type="text/javascript">
+// Overrides:
+// var afterpay_min = 0.04;            // As per your Afterpay contract.
+// var afterpay_max = 2000.00;         // As per your Afterpay contract.
+// var afterpay_cbt_enabled = false;   // As per your Afterpay contract; change to true to display Cross-Border Trade artwork (for AU/NZ).
+// var afterpay_logo_theme = 'colour'; // Can be 'colour', 'black' or 'white'.
+// var afterpay_product_selector = '#product-price-selector';
+// var afterpay_cart_integration_enabled = true;
+// var afterpay_cart_static_selector = '#cart-subtotal-selector';
+
+// Non-editable fields:
+    var afterpay_shop_currency = {{ shop.currency | json }};
+    var afterpay_cart_currency = {{ cart.currency.iso_code | json }};
+    var afterpay_shop_money_format = {{ shop.money_format | json }};
+    var afterpay_shop_permanent_domain = {{ shop.permanent_domain | json }};
+    var afterpay_theme_name = {{ theme.name | json }};
+    var afterpay_product = {{ product | json }};
+    var afterpay_current_variant = {{ product.selected_or_first_available_variant | json }};
+    var afterpay_cart_total_price = {{ cart.total_price | json }};
+    var afterpay_js_snippet_version = '1.0.7';
+</script>
+<script type="text/javascript" async="async">
+	$('.slider').each(function(e) {
+
+    var slider = $(this),
+        width = slider.width(),
+        handle,
+        handleObj;
+
+    let svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('viewBox', '0 0 ' + width + ' 83');
+
+    slider.html(svg);
+    slider.append($('<div>').addClass('active').html(svg.cloneNode(true)));
+
+    slider.slider({
+        range: true,
+        values: [1800, 7800],
+        min: 500,
+        step: 5,
+        minRange: 1000,
+        max: 12000,
+        create(event, ui) {
+
+            slider.find('.ui-slider-handle').append($('<div />'));
+
+            $(slider.data('value-0')).html(slider.slider('values', 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '&thinsp;'));
+            $(slider.data('value-1')).html(slider.slider('values', 1).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '&thinsp;'));
+            $(slider.data('range')).html((slider.slider('values', 1) - slider.slider('values', 0)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '&thinsp;'));
+
+            setCSSVars(slider);
+
+        },
+        start(event, ui) {
+
+            $('body').addClass('ui-slider-active');
+
+            handle = $(ui.handle).data('index', ui.handleIndex);
+            handleObj = slider.find('.ui-slider-handle');
+
+        },
+        change(event, ui) {
+            setCSSVars(slider);
+        },
+        slide(event, ui) {
+
+            let min = slider.slider('option', 'min'),
+                minRange = slider.slider('option', 'minRange'),
+                max = slider.slider('option', 'max');
+
+            if(ui.handleIndex == 0) {
+                if((ui.values[0] + minRange) >= ui.values[1]) {
+                    slider.slider('values', 1, ui.values[0] + minRange);
+                }
+                if(ui.values[0] > max - minRange) {
+                    return false;
+                }
+            } else if(ui.handleIndex == 1) {
+                if((ui.values[1] - minRange) <= ui.values[0]) {
+                    slider.slider('values', 0, ui.values[1] - minRange);
+                }
+                if(ui.values[1] < min + minRange) {
+                    return false;
+                }
+            }
+
+            $(slider.data('value-0')).html(ui.values[0].toString().replace(/\B(?=(\d{3})+(?!\d))/g, '&thinsp;'));
+            $(slider.data('value-1')).html(ui.values[1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, '&thinsp;'));
+            $(slider.data('range')).html((slider.slider('values', 1) - slider.slider('values', 0)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '&thinsp;'));
+
+            setCSSVars(slider);
+
+        },
+        stop(event, ui) {
+
+            $('body').removeClass('ui-slider-active');
+
+            let duration = .6,
+                ease = Elastic.easeOut.config(1.08, .44);
+
+            TweenMax.to(handle, duration, {
+                '--y': 0,
+                ease: ease
+            });
+
+            TweenMax.to(svgPath, duration, {
+                y: 42,
+                ease: ease
+            });
+
+            handle = null;
+
+        }
+    });
+
+    var svgPath = new Proxy({
+        x: null,
+        y: null,
+        b: null,
+        a: null
+    }, {
+        set(target, key, value) {
+            target[key] = value;
+            if(target.x !== null && target.y !== null && target.b !== null && target.a !== null) {
+                slider.find('svg').html(getPath([target.x, target.y], target.b, target.a, width));
+            }
+            return true;
+        },
+        get(target, key) {
+            return target[key];
+        }
+    });
+
+    svgPath.x = width / 2;
+    svgPath.y = 42;
+    svgPath.b = 0;
+    svgPath.a = width;
+
+    $(document).on('mousemove touchmove', e => {
+        if(handle) {
+
+            let laziness = 4,
+                max = 24,
+                edge = 52,
+                other = handleObj.eq(handle.data('index') == 0 ? 1 : 0),
+                currentLeft = handle.position().left,
+                otherLeft = other.position().left,
+                handleWidth = handle.outerWidth(),
+                handleHalf = handleWidth / 2,
+                y = e.pageY - handle.offset().top - handle.outerHeight() / 2,
+                moveY = (y - laziness >= 0) ? y - laziness : (y + laziness <= 0) ? y + laziness : 0,
+                modify = 1;
+
+            moveY = (moveY > max) ? max : (moveY < -max) ? -max : moveY;
+            modify = handle.data('index') == 0 ? ((currentLeft + handleHalf <= edge ? (currentLeft + handleHalf) / edge : 1) * (otherLeft - currentLeft - handleWidth <= edge ? (otherLeft - currentLeft - handleWidth) / edge : 1)) : ((currentLeft - (otherLeft + handleHalf * 2) <= edge ? (currentLeft - (otherLeft + handleWidth)) / edge : 1) * (slider.outerWidth() - (currentLeft + handleHalf) <= edge ? (slider.outerWidth() - (currentLeft + handleHalf)) / edge : 1));
+            modify = modify > 1 ? 1 : modify < 0 ? 0 : modify;
+
+            if(handle.data('index') == 0) {
+                svgPath.b = currentLeft / 2  * modify;
+                svgPath.a = otherLeft;
+            } else {
+                svgPath.b = otherLeft + handleHalf;
+                svgPath.a = (slider.outerWidth() - currentLeft) / 2 + currentLeft + handleHalf + ((slider.outerWidth() - currentLeft) / 2) * (1 - modify);
+            }
+
+            svgPath.x = currentLeft + handleHalf;
+            svgPath.y = moveY * modify + 42;
+
+            handle.css('--y', moveY * modify);
+
+        }
+    });
+
+});
+
+function getPoint(point, i, a, smoothing) {
+    let cp = (current, previous, next, reverse) => {
+            let p = previous || current,
+                n = next || current,
+                o = {
+                    length: Math.sqrt(Math.pow(n[0] - p[0], 2) + Math.pow(n[1] - p[1], 2)),
+                    angle: Math.atan2(n[1] - p[1], n[0] - p[0])
+                },
+                angle = o.angle + (reverse ? Math.PI : 0),
+                length = o.length * smoothing;
+            return [current[0] + Math.cos(angle) * length, current[1] + Math.sin(angle) * length];
+        },
+        cps = cp(a[i - 1], a[i - 2], point, false),
+        cpe = cp(point, a[i - 1], a[i + 1], true);
+    return `C ${cps[0]},${cps[1]} ${cpe[0]},${cpe[1]} ${point[0]},${point[1]}`;
+}
+
+function getPath(update, before, after, width) {
+    let smoothing = .16,
+        points = [
+            [0, 42],
+            [before <= 0 ? 0 : before, 42],
+            update,
+            [after >= width ? width : after, 42],
+            [width, 42]
+        ],
+        d = points.reduce((acc, point, i, a) => i === 0 ? `M ${point[0]},${point[1]}` : `${acc} ${getPoint(point, i, a, smoothing)}`, '');
+    return `<path d="${d}" />`;
+}
+
+function setCSSVars(slider) {
+    let handle = slider.find('.ui-slider-handle');
+    slider.css({
+        '--l': handle.eq(0).position().left + handle.eq(0).outerWidth() / 2,
+        '--r': slider.outerWidth() - (handle.eq(1).position().left + handle.eq(1).outerWidth() / 2)
+    });
+}  
+</script>
+<script defer type="text/javascript" src="https://static.afterpay.com/shopify-afterpay-javascript.js" async="async"></script>
+<!-- End Shopify-Afterpay JavaScript Snippet (v1.0.7) -->
+
+
+{% endif %}
