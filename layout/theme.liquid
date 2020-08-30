@@ -9,7 +9,8 @@
 		})(window,document,'script','dataLayer','GTM-PB9HVJQ');
  	</script>
     <link rel="preload" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" as="style" onload="this.rel='stylesheet'"/>
-    
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"/>
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
@@ -139,9 +140,11 @@
     <li id="a11y-new-window-external-message">{{ 'general.accessibility.new_window_and_external' | t }}</li>
   </ul>
    
-  {{ 'jquery-2.2.3.min.js' | asset_url | script_tag }}
+ 
+  <script src="{{ 'jquery-2.2.3.min.js' | asset_url }}" async="async"></script>
+  
   {{ 'theme.js' | asset_url | script_tag }}
-  {{ 'jquery-ui.js' | asset_url | script_tag }}
+  <script src="{{ 'jquery-ui.js' | asset_url }}" async="async"></script>
   
     <script src="application.js" async="async"></script>
 
